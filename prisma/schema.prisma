@@ -13,8 +13,8 @@ datasource db {
 
 model Book {
   id          String    @id @default(uuid())
-  title       String
-  description String?
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
   isbn        Int?
   date_pub    DateTime?
   images      String[]
