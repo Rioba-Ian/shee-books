@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Book {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  isbn        Int?
+  date_pub    DateTime?
+  images      String[]
+
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId String
+
+  genres  Genre?  @relation(fields: [genreId], references: [id])
+  genreId String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id    String @id @default(uuid())
+  title String
+
+  book Book[]
+}
+
+model Author {
+  id         String @id @default(uuid())
+  first_name String
+  last_name  String
+  authorId   String
+
+  books Book[]
+}
