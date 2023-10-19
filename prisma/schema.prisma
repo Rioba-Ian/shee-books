@@ -12,18 +12,18 @@ datasource db {
 }
 
 model Book {
-  id          String    @id @default(uuid())
-  title       String    @db.VarChar(255)
-  description String?   @db.Text
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
   isbn        Int?
-  date_pub    DateTime?
+  year_pub    Int?
   images      String[]
 
   author   Author @relation(fields: [authorId], references: [id])
   authorId String
 
-  genres  Genre?  @relation(fields: [genreId], references: [id])
-  genreId String? @unique
+  genres  Genre? @relation(fields: [genreId], references: [id])
+  genreId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,7 +33,7 @@ model Genre {
   id    String @id @default(uuid())
   title String
 
-  book Book[]
+  books Book[]
 }
 
 model Author {
