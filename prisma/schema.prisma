@@ -40,7 +40,6 @@ model Author {
   id         String @id @default(uuid())
   first_name String
   last_name  String
-  authorId   String
 
   books Book[]
 }
