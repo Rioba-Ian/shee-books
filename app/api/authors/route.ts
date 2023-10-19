@@ -7,7 +7,7 @@ const createAuthorSchema = z.object({
     last_name: z.string().min(1, 'Last Name is required.').max(255)
 })
 
-export async function GET(response: Response) {
+export async function GET(request: Request) {
     const authors = await prisma?.author.findMany({
         include: {
             books: true
