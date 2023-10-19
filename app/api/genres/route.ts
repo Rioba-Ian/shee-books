@@ -6,7 +6,7 @@ const createGenreSchema = z.object({
     title: z.string().min(1, 'Title is required.').max(255),
 })
 
-export async function GET(response: Response) {
+export async function GET(request: Request) {
     const genres = await prisma?.genre.findMany()
 
     return NextResponse.json(genres, { status: 200 })
