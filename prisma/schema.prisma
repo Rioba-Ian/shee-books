@@ -14,15 +14,14 @@ model Book {
   id          String   @id @default(uuid())
   title       String   @db.VarChar(255)
   description String?  @db.Text
-  isbn        Int?
   year_pub    Int?
   images      String[]
+  author      String   @db.VarChar(255)
 
-  author   Author @relation(fields: [authorId], references: [id])
-  authorId String
+  genres  Genre?  @relation(fields: [genreId], references: [id])
+  genreId String?
 
-  genres  Genre? @relation(fields: [genreId], references: [id])
-  genreId String
+  collections CollectionOnBooks[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,10 +34,19 @@ model Genre {
   books Book[]
 }
 
-model Author {
-  id         String @id @default(uuid())
-  first_name String
-  last_name  String
+model Collection {
+  id    String              @id @default(uuid())
+  title String              @db.VarChar(255)
+  books CollectionOnBooks[]
+}
 
-  books Book[]
+model CollectionOnBooks {
+  book         Book       @relation(fields: [bookId], references: [id])
+  bookId       String
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId String
+  assignedAt   DateTime   @default(now())
+  assignedBy   String
+
+  @@id([bookId, collectionId])
 }
