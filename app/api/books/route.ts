@@ -18,10 +18,6 @@ export async function POST(request: Request) {
 
         const genreIds = genres?.map((genre) => genre.id);
 
-        const collections = await prisma.collection.findMany({});
-
-        const collectionIds = collections?.map((collection) => collection.id);
-
         const addBookSchema = z.object({
             title: z.string().min(1, "Title is required.").max(255),
             description: z.string().min(1, "Description is required.").optional(),
@@ -31,7 +27,7 @@ export async function POST(request: Request) {
             genreId: z
                 .string()
                 .uuid()
-                .refine((value) => genreIds?.includes(value), "Invalid genre ID."),
+                .refine((value) => genreIds?.includes(value), "Invalid genre ID.").optional(),
             collectionIds: z.array(
                 z.object({
                     bookId_collectionId: z.object({
@@ -39,7 +35,7 @@ export async function POST(request: Request) {
                         collectionId: z.string().uuid()
                     })
                 })
-            )
+            ).optional()
         });
 
         const body = await request.json();
